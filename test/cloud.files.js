@@ -8,6 +8,7 @@ module.exports = {
     'env/jenkins/jobs/jenkins-test-docker/config.xml',
     'env/jenkins/jobs/jenkins-test-fail/config.xml',
     'jenkins.yml',
+    'docs/DEVCLOUD.md'
   ],
   extended: [
     'env/jenkins/jobs/cron-dev/config.xml',

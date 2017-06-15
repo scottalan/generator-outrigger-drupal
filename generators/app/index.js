@@ -45,25 +45,26 @@ module.exports = Generator.extend({
       }
     }.bind(this));
 
-    if (_.isUndefined(options['useENV'])) {
-      prompts.push({
-        name: 'useENV',
-        type: 'confirm',
-        message: 'Use Outrigger Environment?'
-      });
-    }
     var envPrompts = require('../lib/prompts.js');
     envPrompts.forEach(function (item) {
       if (_.isUndefined(options[item.name])) {
         var validate = item.when;
         item.when = function(answers) {
-          return answers['useENV'] && (!_.isFunction(validate) || validate(answers));
+          return !_.isFunction(validate) || validate(answers);
         };
         item.default = this.config.get(item.name) || item.default;
 
         prompts.push(item);
       }
     }.bind(this));
+
+    if (_.isUndefined(options['useCloud'])) {
+      prompts.push({
+        name: 'useCloud',
+        type: 'confirm',
+        message: 'Use Phase2 DevCloud/Outrigger Cloud Hosting?'
+      });
+    }
 
     if (_.isUndefined(options['usePLS'])) {
       prompts.push({
@@ -147,9 +148,7 @@ module.exports = Generator.extend({
     },
 
     env: function() {
-      if (options['useENV']) {
-        this.composeWith(require.resolve('../environment'), options);
-      }
+      this.composeWith(require.resolve('../environment'), options);
     },
 
     pls: function() {
@@ -157,6 +156,12 @@ module.exports = Generator.extend({
         this.composeWith(require.resolve('generator-pattern-lab-starter'), options);
       }
     },
+
+    cloud: function() {
+      if (options['useCloud']) {
+        this.composeWith(require.resolve('../cloud'), options);
+      }
+    }
 
     readme: function() {
       var tokens = require('../lib/tokens')(options);

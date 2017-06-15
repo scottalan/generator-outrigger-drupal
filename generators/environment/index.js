@@ -115,18 +115,6 @@ module.exports = Generator.extend({
       );
     },
 
-    dockerComposeDevcloud: function() {
-      tokens.dockerComposeExt = 'devcloud.';
-      tokens.cache.docker.extLink = dockerComposeLink(options.machineName + "_${DOCKER_ENV}_cache:cache");
-      tokens.db.docker.extLink = options.machineName + "_${DOCKER_ENV}_db:db";
-
-      this.fs.copyTpl(
-        this.templatePath('docker/build.devcloud.yml'),
-        this.destinationPath('build.devcloud.yml'),
-        tokens
-      );
-    },
-
     docs: function() {
       this.fs.copyTpl(
         this.templatePath('docs/CONTRIBUTING.md'),
@@ -158,12 +146,6 @@ module.exports = Generator.extend({
       this.fs.copyTpl(
         this.templatePath('docs/OUTRIGGER.md'),
         this.destinationPath('docs/OUTRIGGER.md'),
-        tokens
-      );
-
-      this.fs.copyTpl(
-        this.templatePath('docs/DEVCLOUD.md'),
-        this.destinationPath('docs/DEVCLOUD.md'),
         tokens
       );
     },
@@ -299,10 +281,6 @@ module.exports = Generator.extend({
         this.destinationPath('./.outrigger.yml'),
         tokens
       );
-    },
-
-    jenkins: function() {
-      this.composeWith(require.resolve('../jenkins'), options);
     }
   },
 
